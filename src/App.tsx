@@ -1,39 +1,32 @@
 import * as React from "react";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import Button from "@mui/material/Button";
-import ProTip from "./ProTip";
+import { Container, Box, Typography, TextField, Button } from "@mui/material";
 import MyDialog from "./MyDialog";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}.
-    </Typography>
-  );
-}
+import { createState } from "./state";
 
 export default function App() {
+  const state = createState();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    state.updateName(event.target.value);
+  };
+
   return (
     <Container maxWidth="sm">
-      <Box sx={{ my: 4 }}>
+      <Box
+        sx={{ my: 4, display: "flex", flexDirection: "column", gap: "20px" }}
+      >
         <Typography variant="h4" component="h1" gutterBottom>
-          Create React App example with TypeScript
+          Enter your name to say Hey!
         </Typography>
+        <TextField label="Name" value={state.name} onChange={handleChange} />
         <Button variant="outlined" onClick={() => setIsDialogOpen(true)}>
           Open Dialog
         </Button>
-        <ProTip />
-        <Copyright />
       </Box>
-      {isDialogOpen && <MyDialog onClose={() => setIsDialogOpen(false)} />}
+      {isDialogOpen && (
+        <MyDialog state={state} onClose={() => setIsDialogOpen(false)} />
+      )}
     </Container>
   );
 }
