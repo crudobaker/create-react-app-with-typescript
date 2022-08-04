@@ -11,22 +11,29 @@ import { State } from "./state";
 
 export type MyDialogProps = {
   state: State;
+  show: boolean;
   onClose: Function;
 };
 
 export default function MyDialog(props: MyDialogProps) {
-  const handleClose = () => props.onClose();
+  const ageType = () => {
+    const { age } = props.state;
+    if (age < 25) return "Young";
+    else return "Old";
+  };
 
   return (
-    <Dialog open={true} onClose={handleClose}>
+    <Dialog open={props.show} onClose={() => props.onClose()}>
       <DialogTitle>{"Hello!!!!"}</DialogTitle>
       <DialogContent>
         <DialogContentText>
           {`Welcome ${props.state.name} to the Team!`}
+          <br />
+          {`Your are too ${ageType()}!`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
+        <Button onClick={() => props.onClose()}>Close</Button>
       </DialogActions>
     </Dialog>
   );

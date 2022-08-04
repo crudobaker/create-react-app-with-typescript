@@ -19,14 +19,30 @@ export default function App() {
         <Typography variant="h4" component="h1" gutterBottom>
           Enter your name to say Hey!
         </Typography>
-        <TextField label="Name" value={state.name} onChange={handleChange} />
+        <TextField
+          label="Name"
+          value={state.name}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            state.updateName(event.target.value)
+          }
+        />
+        <TextField
+          label="Age"
+          value={state.age}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            state.updateAge(event.target.value)
+          }
+        />
         <Button variant="outlined" onClick={() => setIsDialogOpen(true)}>
           Open Dialog
         </Button>
       </Box>
-      {isDialogOpen && (
-        <MyDialog state={state} onClose={() => setIsDialogOpen(false)} />
-      )}
+
+      <MyDialog
+        show={isDialogOpen}
+        state={state}
+        onClose={() => setIsDialogOpen(false)}
+      />
     </Container>
   );
 }
