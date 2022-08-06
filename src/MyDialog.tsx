@@ -7,34 +7,41 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import { State } from "./state";
+import { AppContext, type AppContextType } from "./context";
 
 export type MyDialogProps = {
-  state: State;
   show: boolean;
   onClose: Function;
 };
 
 export default function MyDialog(props: MyDialogProps) {
-  const ageType = () => {
-    const { age } = props.state;
-    if (age < 25) return "Young";
-    else return "Old";
+  const onPressButton = (context: AppContextType) => {
+    const { age } = context;
+    if (age < 25) context.updateFeature("Young");
+    else context.updateFeature("Old");
+
+    props.onClose();
   };
 
   return (
-    <Dialog open={props.show} onClose={() => props.onClose()}>
-      <DialogTitle>{"Hello!!!!"}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          {`Welcome ${props.state.name} to the Team!`}
-          <br />
-          {`Your are too ${ageType()}!`}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => props.onClose()}>Close</Button>
-      </DialogActions>
-    </Dialog>
+    <AppContext.Consumer>
+      {(context: AppContextType) => (
+        <Dialog open={props.show} onClose={() => props.onClose()}>
+          <DialogTitle>{"Hello!!!!"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {`Welcome ${context.name} to the Team!`}
+              <br />
+              <Button onClick={() => onPressButton(context)}>
+                Pressme to know your Feature
+              </Button>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => props.onClose()}>Close</Button>
+          </DialogActions>
+        </Dialog>
+      )}
+    </AppContext.Consumer>
   );
 }
